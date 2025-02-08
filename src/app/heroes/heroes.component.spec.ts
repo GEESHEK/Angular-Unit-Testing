@@ -8,9 +8,9 @@ describe('HeroesComponent', () => {
 
   beforeEach(() => {
     HEROES = [
-      {id: 1, name: 'h1', strenght: 8},
-      {id: 2, name: 'h2', strenght: 24},
-      {id: 3, name: 'h3', strenght: 55}
+      {id: 1, name: 'h1', strength: 8},
+      {id: 2, name: 'h2', strength: 24},
+      {id: 3, name: 'h3', strength: 55}
     ]
 
     mockHeroesService = jasmine.createSpyObj('HeroesService', ['getHeroes', 'addHero', 'deleteHero']);
