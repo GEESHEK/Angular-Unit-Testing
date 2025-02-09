@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
 
-import { Hero } from '../hero';
-import { HeroService } from '../hero.service';
+import {Hero} from '../hero';
+import {HeroService} from '../hero.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -18,7 +18,8 @@ export class HeroDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private heroService: HeroService,
     private location: Location
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getHero();
@@ -33,12 +34,12 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
-  save(): void {
-    var p = new Promise((resolve) => {
-      this.heroService.updateHero(this.hero).subscribe(() => this.goBack());
-      resolve();
-    });
-  }
+  // save(): void {
+  //   var p = new Promise((resolve) => {
+  //     this.heroService.updateHero(this.hero).subscribe(() => this.goBack());
+  //     resolve();
+  //   });
+  // }
 
   // save(): void {
   //   debounce(() => {
@@ -46,20 +47,33 @@ export class HeroDetailComponent implements OnInit {
   //       .subscribe(() => this.goBack());
   //   }, 250, false)();
   // }
+
+  save(): void {
+    someThirdPartyPromoise().then(() => {
+      this.heroService.updateHero(this.hero)
+        .subscribe(() => this.goBack());
+    });
+  }
 }
 
-// function debounce(func, wait, immediate) {
-//   var timeout;
-//   return function () {
-//     var context = this,
-//       args = arguments;
-//     var later = function () {
-//       timeout = null;
-//       if (!immediate) func.apply(context, args);
-//     };
-//     var callNow = immediate && !timeout;
-//     clearTimeout(timeout);
-//     timeout = setTimeout(later, wait);
-//     if (callNow) func.apply(context, args);
-//   };
-// }
+function someThirdPartyPromoise() {
+  return new Promise((resolve) => {
+    resolve(null);
+  });
+}
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    var context = this,
+      args = arguments;
+    var later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
