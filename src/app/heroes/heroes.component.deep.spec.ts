@@ -26,7 +26,7 @@ describe('HeroesComponent (deep tests', () => {
         HeroComponent
       ],
       providers: [
-        { provide: HeroService, useValue: mockHeroService },
+        {provide: HeroService, useValue: mockHeroService},
       ],
       imports: [HttpClientTestingModule],
       schemas: [NO_ERRORS_SCHEMA]
@@ -47,5 +47,48 @@ describe('HeroesComponent (deep tests', () => {
     for (let i = 0; i < heroComponentsDEs.length; i++) {
       expect(heroComponentsDEs[i].componentInstance.hero).toEqual(HEROES[i]);
     }
+  });
+
+  // collection of children
+  // trigger the event on the child that the parent is listening to
+  // trigger a delete method on the parent component
+  it(`should call heroService.deleteHero when the Hero Component's
+      delete button is clicked`, () => {
+    //watch to see if this method is invoked
+    spyOn(fixture.componentInstance, 'delete');
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+    fixture.detectChanges();
+
+    // component is actually a subclass of a directive
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    // trigger the underlying html element
+    heroComponents[0].query(By.css('button'))
+      .triggerEventHandler('click', {stopPropagation: () => {}})
+
+    expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+  });
+
+  // have the child raise the delete event and not trigger it through clicking the HTML
+  it(`should call heroService.deleteHero when the Hero Component's
+      delete button is triggered through the component`, () => {
+    //watch to see if this method is invoked
+    spyOn(fixture.componentInstance, 'delete');
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+    fixture.detectChanges();
+
+    // component is actually a subclass of a directive
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    // (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+    // (heroComponents[0].componentInstance).delete.emit(undefined);
+
+    // debugElements have a triggerEventHandler
+    // in this case we are testing less than the above methods
+    // we don't even know if the child component actually has a delete event emitter
+    // just telling the debugElement for the child component to raise the delete event
+    heroComponents[0].triggerEventHandler('delete', null);
+
+    expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
   });
 })
