@@ -45,7 +45,7 @@ describe('HeroDetailComponent', () => {
     });
 
     //async test, wrap call back in fakeAsync
-    //treat async as synchronous
+    //treat async as synchronous (works for promises as well)
     it('should call updateHero when save is called', fakeAsync(() => {
         mockHeroService.updateHero.and.returnValue(of({}));
         fixture.detectChanges();
@@ -54,5 +54,18 @@ describe('HeroDetailComponent', () => {
         flush();
 
         expect(mockHeroService.updateHero).toHaveBeenCalled();
-    }))
+    }));
+
+    //promise test
+    // it('should call updateHero when save is called', waitForAsync(() => {
+    //     mockHeroService.updateHero.and.returnValue(of({}));
+    //     fixture.detectChanges();
+    //
+    //     fixture.componentInstance.save();
+    //
+    //     //wait for any promise to resolve then execute the code
+    //     fixture.whenStable().then(() => {
+    //         expect(mockHeroService.updateHero).toHaveBeenCalled();
+    //     })
+    // }));
 })

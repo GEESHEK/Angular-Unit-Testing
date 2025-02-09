@@ -18,7 +18,8 @@ export class HeroDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private heroService: HeroService,
     private location: Location
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getHero();
@@ -40,12 +41,25 @@ export class HeroDetailComponent implements OnInit {
   //   });
   // }
 
+  // save(): void {
+  //   debounce(() => {
+  //     this.heroService.updateHero(this.hero)
+  //       .subscribe(() => this.goBack());
+  //   }, 250, false)();
+  // }
+
   save(): void {
-    debounce(() => {
+    someThirdPartyPromoise().then(() => {
       this.heroService.updateHero(this.hero)
         .subscribe(() => this.goBack());
-    }, 250, false)();
+    });
   }
+}
+
+function someThirdPartyPromoise() {
+  return new Promise((resolve) => {
+    resolve(null);
+  });
 }
 
 function debounce(func, wait, immediate) {
